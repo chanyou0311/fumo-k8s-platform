@@ -32,7 +32,7 @@ fumo-k8s-platform/
 ├── k3d-config.yaml    # k3d クラスタ定義
 ├── Makefile
 └── platform/           # k3s HelmChart CRD マニフェスト
-    └── headlamp.yaml
+    └── *.yaml          # アプリごとに1ファイル
 ```
 
 ## アプリ追加

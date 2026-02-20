@@ -18,7 +18,7 @@ fumo-k8s-platform/
 ├── CLAUDE.md → AGENTS.md
 ├── README.md
 └── platform/           # k3s HelmChart CRD マニフェスト
-    └── headlamp.yaml
+    └── *.yaml          # アプリごとに1ファイル
 ```
 
 ## Makefile ターゲット
