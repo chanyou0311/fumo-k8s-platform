@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: headlamp
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: headlamp
+  namespace: kube-system
+spec:
+  repo: https://kubernetes-sigs.github.io/headlamp/
+  chart: headlamp
+  targetNamespace: headlamp
+  valuesContent: |-
+    ingress:
+      enabled: true
+      hosts:
+        - host: headlamp.localhost
+          paths:
+            - path: /
+              type: ImplementationSpecific
