@@ -8,8 +8,7 @@ k3d でローカル開発クラスタを立ち上げ、Kustomize overlay + k3s H
 - **Kustomize** — 環境別マニフェスト管理 (base + overlays)
 - **k3s HelmChart CRD** — Helm CLI 不要の宣言的デプロイ
 - **k3d** — ローカル開発用 k3s クラスタ
-- **Sealed Secrets** — シークレット暗号化 (BYOC 鍵)
-- **SOPS + AGE** — BYOC 秘密鍵の暗号化
+- **Sealed Secrets** — シークレット暗号化 (自動生成鍵)
 
 ## ディレクトリ構造
 
@@ -35,8 +34,7 @@ fumo-k8s-platform/
 │       └── patches/
 │           ├── argocd-values.yaml
 │           └── headlamp-values.yaml
-├── secrets/                      # BYOC 鍵 (cert.pem + key.pem.enc)
-├── .sops.yaml                    # SOPS 暗号化設定
+├── secrets/                      # (将来の拡張用)
 ├── k3d-config.yaml
 ├── Makefile
 └── README.md
@@ -44,7 +42,7 @@ fumo-k8s-platform/
 
 ## Makefile ターゲット
 
-- `make cluster-create` — kustomize build → k3d クラスタ作成 + BYOC 鍵投入
+- `make cluster-create` — kustomize build → k3d クラスタ作成
 - `make cluster-delete` — クラスタ削除 + 一時ファイル cleanup
 - `make manifests` — kustomize build 出力を表示
 
@@ -75,17 +73,27 @@ spec:
 
 ## SealedSecret 作成
 
+### ローカル環境
+ローカル環境では暗号化不要。平文 Secret を overlay に直接配置する。
+
+### 本番環境
+本番クラスタから証明書を取得して暗号化する:
+
 ```bash
+# 本番クラスタから証明書を取得
+kubeseal --controller-namespace sealed-secrets --fetch-cert \
+  --context fumo-k3s > /tmp/sealed-secrets-cert.pem
+
 # 平文 Secret を作成 (apply しない)
 kubectl create secret generic <name> --namespace <ns> \
   --from-literal=key=value --dry-run=client -o yaml > /tmp/secret.yaml
 
-# BYOC 公開鍵で暗号化
-kubeseal --format yaml --cert secrets/sealed-secrets-cert.pem \
+# 暗号化
+kubeseal --format yaml --cert /tmp/sealed-secrets-cert.pem \
   < /tmp/secret.yaml > sealed-secret.yaml
 
-# 平文を削除
-rm /tmp/secret.yaml
+# 一時ファイルを削除
+rm /tmp/secret.yaml /tmp/sealed-secrets-cert.pem
 ```
 
 ## ローカル環境アクセス
