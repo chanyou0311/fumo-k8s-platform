@@ -7,6 +7,7 @@ fumo homelab の Kubernetes platform 層マニフェスト管理リポジトリ�
 - **Kustomize** — 環境別マニフェスト管理 (base + overlays)
 - **k3s HelmChart CRD** — Helm CLI 不要の宣言的デプロイ
 - **k3d** — ローカル開発用 k3s クラスタ
+- **MetalLB** — LoadBalancer VIP 割当 (L2 mode, 本番のみ)
 - **Sealed Secrets** — シークレット暗号化 (自動生成鍵)
 
 ## ディレクトリ構造
@@ -31,6 +32,8 @@ fumo-k8s-platform/
 │       ├── kustomization.yaml
 │       ├── cert-manager-issuer.yaml
 │       ├── argocd-application.yaml
+│       ├── metallb.yaml
+│       ├── metallb-config.yaml
 │       └── patches/
 │           ├── argocd-values.yaml
 │           └── headlamp-values.yaml

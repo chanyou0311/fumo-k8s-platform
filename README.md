@@ -47,6 +47,8 @@ fumo-k8s-platform/
 │       ├── kustomization.yaml
 │       ├── cert-manager-issuer.yaml
 │       ├── argocd-application.yaml
+│       ├── metallb.yaml
+│       ├── metallb-config.yaml
 │       └── patches/
 ├── k3d-config.yaml
 └── Makefile
@@ -69,11 +71,31 @@ fumo-k8s-platform/
 
 ### ブートストラップ手順
 
+#### 事前準備: ServiceLB 無効化
+
+MetalLB と klipper-lb (ServiceLB) は共存不可。k3s ノードで ServiceLB を無効化する:
+
+```bash
+# /etc/rancher/k3s/config.yaml に追記
+disable:
+  - servicelb
+
+# k3s を再起動
+sudo systemctl restart k3s
+```
+
 #### Phase 1: 基盤デプロイ
 
 ```bash
+# 1回目: HelmChart CRD を apply (MetalLB/ArgoCD CRD 未登録のため一部リソースはエラー)
 kubectl kustomize overlays/production | kubectl --context fumo-k3s apply -f -
+
+# 各 deployment の起動を待機
 kubectl --context fumo-k3s wait --for=condition=available deployment/sealed-secrets-controller -n sealed-secrets --timeout=300s
+kubectl --context fumo-k3s wait --for=condition=available deployment/metallb-controller -n metallb-system --timeout=300s
+
+# 2回目: CRD 登録後のリソース (IPAddressPool, L2Advertisement, ArgoCD Application 等) を apply
+kubectl kustomize overlays/production | kubectl --context fumo-k3s apply -f -
 ```
 
 #### Phase 2: SealedSecret 作成
