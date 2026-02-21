@@ -51,6 +51,13 @@ fumo-k8s-platform/
 └── Makefile
 ```
 
+## ローカル環境アクセス
+
+| サービス | URL | ログイン方法 |
+|---------|-----|-------------|
+| ArgoCD | http://argocd.localhost | `admin` / `admin` |
+| Headlamp | http://headlamp.localhost | `kubectl get secret headlamp-token -n headlamp -o jsonpath='{.data.token}' \| base64 -d` |
+
 ## コンポーネント追加
 
 1. `base/<name>.yaml` に Namespace + HelmChart CRD を記述
