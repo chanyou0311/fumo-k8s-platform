@@ -1,7 +1,6 @@
 # AGENTS.md
 
-fumo homelab の Kubernetes platform 層マニフェスト管理リポジトリ。
-k3d でローカル開発クラスタを立ち上げ、Kustomize overlay + k3s HelmChart CRD でミドルウェアをデプロイする。
+fumo homelab の Kubernetes platform 層マニフェスト管理リポジトリ。k3d でローカル開発クラスタ、本番 k3s クラスタは ArgoCD で GitOps 管理する。
 
 ## 技術スタック
 
@@ -31,6 +30,7 @@ fumo-k8s-platform/
 │   └── production/               # 本番 k3s 用
 │       ├── kustomization.yaml
 │       ├── cert-manager-issuer.yaml
+│       ├── argocd-application.yaml
 │       └── patches/
 │           ├── argocd-values.yaml
 │           └── headlamp-values.yaml
@@ -69,6 +69,17 @@ spec:
   chart: <chart-name>
   targetNamespace: <namespace>
 ```
+
+## 本番環境デプロイ
+
+ブートストラップ:
+
+```bash
+kubectl kustomize overlays/production | kubectl --context fumo-k3s apply -f -
+```
+
+初回は SealedSecret の作成が必要（手順は README.md 参照）。
+以降は ArgoCD が Git の main ブランチから自動同期する。
 
 ## SealedSecret 作成
 

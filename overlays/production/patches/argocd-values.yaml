@@ -12,13 +12,3 @@ spec:
         tls: true
         annotations:
           cert-manager.io/cluster-issuer: fumo-issuer
-    configs:
-      cm:
-        resource.exclusions: |
-          - apiGroups:
-            - helm.cattle.io
-            kinds:
-            - HelmChart
-            - HelmChartConfig
-            clusters:
-            - "*"
