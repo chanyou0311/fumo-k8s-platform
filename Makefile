@@ -6,14 +6,14 @@ MANIFEST_DIR := /tmp/fumo-k8s-platform-manifests
 .PHONY: cluster-create cluster-delete manifests
 
 manifests:
-	@kustomize build overlays/$(OVERLAY)
+	@kubectl kustomize overlays/$(OVERLAY)
 
 cluster-create:
 	@if k3d cluster list $(CLUSTER_NAME) >/dev/null 2>&1; then \
 		echo "Cluster '$(CLUSTER_NAME)' already exists."; \
 	else \
 		mkdir -p $(MANIFEST_DIR) && \
-		kustomize build overlays/$(OVERLAY) -o $(MANIFEST_DIR)/ && \
+		kubectl kustomize overlays/$(OVERLAY) > $(MANIFEST_DIR)/manifests.yaml && \
 		k3d cluster create --config $(K3D_CONFIG) \
 			--volume "$(MANIFEST_DIR):/var/lib/rancher/k3s/server/manifests/platform@server:0" && \
 		echo "Waiting for sealed-secrets namespace..." && \
