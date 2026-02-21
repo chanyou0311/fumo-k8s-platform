@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - ../../base
   - cert-manager-issuer.yaml
+  - headlamp-token.yaml
 patches:
   - path: patches/argocd-values.yaml
   - path: patches/headlamp-values.yaml

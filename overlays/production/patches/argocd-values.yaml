@@ -8,12 +8,8 @@ spec:
     server:
       ingress:
         enabled: true
-        hosts:
-          - argocd.fumo.jp
-        tls:
-          - secretName: argocd-tls
-            hosts:
-              - argocd.fumo.jp
+        hostname: argocd.fumo.jp
+        tls: true
         annotations:
           cert-manager.io/cluster-issuer: fumo-issuer
     configs:

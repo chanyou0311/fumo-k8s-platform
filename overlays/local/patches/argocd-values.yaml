@@ -5,12 +5,9 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
-    server:
-      ingress:
-        enabled: true
-        hosts:
-          - argocd.localhost
     configs:
+      params:
+        server.insecure: true
       cm:
         resource.exclusions: |
           - apiGroups:
@@ -20,3 +17,9 @@ spec:
             - HelmChartConfig
             clusters:
             - "*"
+      secret:
+        argocdServerAdminPassword: "$2y$10$8diXBVCqTuPYVS6oG3zXm.dtHrvzdJ6pmXM9zclBL3QzbvhmdOwTK"
+    server:
+      ingress:
+        enabled: true
+        hostname: argocd.localhost

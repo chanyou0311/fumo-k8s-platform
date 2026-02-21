@@ -25,6 +25,7 @@ fumo-k8s-platform/
 │   ├── local/                    # ローカル k3d 用
 │   │   ├── kustomization.yaml
 │   │   ├── cert-manager-issuer.yaml
+│   │   ├── headlamp-token.yaml
 │   │   └── patches/
 │   │       ├── argocd-values.yaml
 │   │       └── headlamp-values.yaml
@@ -86,6 +87,11 @@ kubeseal --format yaml --cert secrets/sealed-secrets-cert.pem \
 # 平文を削除
 rm /tmp/secret.yaml
 ```
+
+## ローカル環境アクセス
+
+- **ArgoCD**: http://argocd.localhost — `admin` / `admin`
+- **Headlamp**: http://headlamp.localhost — トークン取得: `kubectl get secret headlamp-token -n headlamp -o jsonpath='{.data.token}' | base64 -d`
 
 ## コーディング規約
 
