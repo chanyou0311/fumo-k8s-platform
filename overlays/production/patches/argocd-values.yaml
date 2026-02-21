@@ -5,20 +5,16 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
+    configs:
+      params:
+        server.insecure: true
     server:
       ingress:
         enabled: true
         hostname: argocd.fumo.jp
-        tls: true
+        extraTls:
+          - secretName: argocd-ingress-tls
+            hosts:
+              - argocd.fumo.jp
         annotations:
           cert-manager.io/cluster-issuer: fumo-issuer
-    configs:
-      cm:
-        resource.exclusions: |
-          - apiGroups:
-            - helm.cattle.io
-            kinds:
-            - HelmChart
-            - HelmChartConfig
-            clusters:
-            - "*"

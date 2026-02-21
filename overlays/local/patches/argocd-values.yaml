@@ -18,7 +18,7 @@ spec:
             clusters:
             - "*"
       secret:
-        argocdServerAdminPassword: "$2y$10$8diXBVCqTuPYVS6oG3zXm.dtHrvzdJ6pmXM9zclBL3QzbvhmdOwTK"
+        argocdServerAdminPassword: "$2y$10$8diXBVCqTuPYVS6oG3zXm.dtHrvzdJ6pmXM9zclBL3QzbvhmdOwTK"  # admin
     server:
       ingress:
         enabled: true

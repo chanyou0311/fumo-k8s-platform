@@ -3,6 +3,11 @@ kind: Kustomization
 resources:
   - ../../base
   - cert-manager-issuer.yaml
+  - argocd-application.yaml
+  - metallb.yaml
+  - metallb-config.yaml
+  - github-repo-creds-sealed.yaml
+  - cloudflare-api-token-sealed.yaml
 patches:
   - path: patches/argocd-values.yaml
   - path: patches/headlamp-values.yaml
