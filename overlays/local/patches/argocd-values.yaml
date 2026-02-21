@@ -1,0 +1,25 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: argocd
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    configs:
+      params:
+        server.insecure: true
+      cm:
+        resource.exclusions: |
+          - apiGroups:
+            - helm.cattle.io
+            kinds:
+            - HelmChart
+            - HelmChartConfig
+            clusters:
+            - "*"
+      secret:
+        argocdServerAdminPassword: "$2y$10$8diXBVCqTuPYVS6oG3zXm.dtHrvzdJ6pmXM9zclBL3QzbvhmdOwTK"
+    server:
+      ingress:
+        enabled: true
+        hostname: argocd.localhost

@@ -1,0 +1,20 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: headlamp
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    ingress:
+      enabled: true
+      hosts:
+        - host: headlamp.fumo.jp
+          paths:
+            - path: /
+              type: ImplementationSpecific
+      tls:
+        - secretName: headlamp-tls
+          hosts:
+            - headlamp.fumo.jp
+      annotations:
+        cert-manager.io/cluster-issuer: fumo-issuer
