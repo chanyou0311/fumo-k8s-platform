@@ -4,6 +4,8 @@ resources:
   - ../../base
   - cert-manager-issuer.yaml
   - argocd-application.yaml
+  - metallb.yaml
+  - metallb-config.yaml
 patches:
   - path: patches/argocd-values.yaml
   - path: patches/headlamp-values.yaml
