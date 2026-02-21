@@ -34,7 +34,6 @@ fumo-k8s-platform/
 │       └── patches/
 │           ├── argocd-values.yaml
 │           └── headlamp-values.yaml
-├── secrets/                      # (将来の拡張用)
 ├── k3d-config.yaml
 ├── Makefile
 └── README.md
