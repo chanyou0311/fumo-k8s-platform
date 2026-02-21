@@ -1,0 +1,28 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: argocd
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    server:
+      ingress:
+        enabled: true
+        hosts:
+          - argocd.fumo.jp
+        tls:
+          - secretName: argocd-tls
+            hosts:
+              - argocd.fumo.jp
+        annotations:
+          cert-manager.io/cluster-issuer: fumo-issuer
+    configs:
+      cm:
+        resource.exclusions: |
+          - apiGroups:
+            - helm.cattle.io
+            kinds:
+            - HelmChart
+            - HelmChartConfig
+            clusters:
+            - "*"

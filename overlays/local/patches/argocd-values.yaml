@@ -1,0 +1,22 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: argocd
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    server:
+      ingress:
+        enabled: true
+        hosts:
+          - argocd.localhost
+    configs:
+      cm:
+        resource.exclusions: |
+          - apiGroups:
+            - helm.cattle.io
+            kinds:
+            - HelmChart
+            - HelmChartConfig
+            clusters:
+            - "*"
